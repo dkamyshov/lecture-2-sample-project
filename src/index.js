@@ -11,12 +11,36 @@ const counterDecButton = document.getElementById("counter-dec");
  */
 let counter = 0;
 
-counterIncButton.addEventListener("click", () => {
-  counter++;
+/**
+ * Отрисует новое значение счетчика.
+ */
+const render = () => {
   counterElement.innerHTML = String(counter);
+};
+
+/**
+ * Обновит состояние счетчика
+ *
+ * @param {number} delta
+ */
+const update = delta => {
+  counter += delta;
+};
+
+/**
+ * Выполнит обработку пользовательского ввода.
+ *
+ * @param {number} delta
+ */
+const processInput = delta => {
+  update(delta);
+  render();
+};
+
+counterIncButton.addEventListener("click", () => {
+  processInput(1);
 });
 
 counterDecButton.addEventListener("click", () => {
-  counter--;
-  counterElement.innerHTML = String(counter);
+  processInput(-1);
 });
