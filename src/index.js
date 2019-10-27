@@ -53,10 +53,23 @@ const modify = delta => ({
   }
 });
 
+/**
+ * Задиспатчит 2 действия "вручную".
+ *
+ * @param {number} delta
+ */
+const modifyTwice = delta => {
+  reduxStore.dispatch(modify(delta));
+
+  setTimeout(() => {
+    reduxStore.dispatch(modify(delta));
+  }, 100);
+};
+
 counterIncButton.addEventListener("click", () => {
-  reduxStore.dispatch(modify(1));
+  modifyTwice(1);
 });
 
 counterDecButton.addEventListener("click", () => {
-  reduxStore.dispatch(modify(-1));
+  modifyTwice(-1);
 });
