@@ -1,3 +1,4 @@
+import { createStore } from "redux";
 import mireaLogoImage from "./mirea.png";
 
 mireaLogo.src = mireaLogoImage;
@@ -31,6 +32,11 @@ const reduxReducer = (state = 0, action) => {
       return state;
   }
 };
+
+/**
+ * Store, в котором будет храниться состояние нашего приложения.
+ */
+const reduxStore = createStore(reduxReducer);
 
 /**
  * Отрисует новое значение счетчика.
