@@ -8,13 +8,6 @@ const counterIncButton = document.getElementById("counter-inc");
 const counterDecButton = document.getElementById("counter-dec");
 
 /**
- * Состояние приложения (в данном случае - значение счетчика).
- *
- * @deprecated
- */
-let counter = 0;
-
-/**
  * Редьюсер для нашего приложения
  *
  * @param {number} state текущее значение счетчика
@@ -51,27 +44,6 @@ const render = () => {
 reduxStore.subscribe(() => {
   render();
 });
-
-/**
- * Обновит состояние счетчика
- *
- * @param {number} delta
- * @deprecated
- */
-const update = delta => {
-  counter += delta;
-};
-
-/**
- * Выполнит обработку пользовательского ввода.
- *
- * @param {number} delta
- * @deprecated
- */
-const processInput = delta => {
-  update(delta);
-  render();
-};
 
 counterIncButton.addEventListener("click", () => {
   reduxStore.dispatch({
