@@ -12,6 +12,27 @@ const counterDecButton = document.getElementById("counter-dec");
 let counter = 0;
 
 /**
+ * Редьюсер для нашего приложения
+ *
+ * @param {number} state текущее значение счетчика
+ * @param {*} action действие
+ */
+const reduxReducer = (state = 0, action) => {
+  switch (action.type) {
+    case "INCREMENT": {
+      return state + 1;
+    }
+
+    case "DECREMENT": {
+      return state - 1;
+    }
+
+    default:
+      return state;
+  }
+};
+
+/**
  * Отрисует новое значение счетчика.
  */
 const render = () => {
