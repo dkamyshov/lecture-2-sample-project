@@ -1,4 +1,4 @@
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import mireaLogoImage from "./mirea.png";
 
 mireaLogo.src = mireaLogoImage;
@@ -25,9 +25,25 @@ const reduxReducer = (state = 0, action) => {
 };
 
 /**
+ * Middleware для повторения действий.
+ *
+ * @param {*} store
+ */
+const modifyTwiceMiddleware = store => next => action => {
+  const dispatchOnce = () => next(action);
+
+  setTimeout(dispatchOnce, 100);
+
+  return dispatchOnce();
+};
+
+/**
  * Store, в котором будет храниться состояние нашего приложения.
  */
-const reduxStore = createStore(reduxReducer);
+const reduxStore = createStore(
+  reduxReducer,
+  applyMiddleware(modifyTwiceMiddleware)
+);
 
 /**
  * Отрисует новое значение счетчика.
@@ -53,23 +69,10 @@ const modify = delta => ({
   }
 });
 
-/**
- * Задиспатчит 2 действия "вручную".
- *
- * @param {number} delta
- */
-const modifyTwice = delta => {
-  reduxStore.dispatch(modify(delta));
-
-  setTimeout(() => {
-    reduxStore.dispatch(modify(delta));
-  }, 100);
-};
-
 counterIncButton.addEventListener("click", () => {
-  modifyTwice(1);
+  reduxStore.dispatch(modify(1));
 });
 
 counterDecButton.addEventListener("click", () => {
-  modifyTwice(-1);
+  reduxStore.dispatch(modify(-1));
 });
