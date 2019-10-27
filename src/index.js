@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import mireaLogoImage from "./mirea.png";
+import thunk from "redux-thunk";
 
 mireaLogo.src = mireaLogoImage;
 
@@ -25,25 +26,9 @@ const reduxReducer = (state = 0, action) => {
 };
 
 /**
- * Middleware для повторения действий.
- *
- * @param {*} store
- */
-const modifyTwiceMiddleware = store => next => action => {
-  const dispatchOnce = () => next(action);
-
-  setTimeout(dispatchOnce, 100);
-
-  return dispatchOnce();
-};
-
-/**
  * Store, в котором будет храниться состояние нашего приложения.
  */
-const reduxStore = createStore(
-  reduxReducer,
-  applyMiddleware(modifyTwiceMiddleware)
-);
+const reduxStore = createStore(reduxReducer, applyMiddleware(thunk));
 
 /**
  * Отрисует новое значение счетчика.
@@ -69,10 +54,25 @@ const modify = delta => ({
   }
 });
 
+/**
+ * Асинхронный modify с помощью redux-thunk.
+ *
+ * @param {*} delta
+ */
+const modifyAsync = delta => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(modify(delta));
+    }, 100);
+
+    return dispatch(modify(delta));
+  };
+};
+
 counterIncButton.addEventListener("click", () => {
-  reduxStore.dispatch(modify(1));
+  reduxStore.dispatch(modifyAsync(1));
 });
 
 counterDecButton.addEventListener("click", () => {
-  reduxStore.dispatch(modify(-1));
+  reduxStore.dispatch(modifyAsync(-1));
 });
