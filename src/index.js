@@ -15,12 +15,8 @@ const counterDecButton = document.getElementById("counter-dec");
  */
 const reduxReducer = (state = 0, action) => {
   switch (action.type) {
-    case "INCREMENT": {
-      return state + 1;
-    }
-
-    case "DECREMENT": {
-      return state - 1;
+    case "MODIFY": {
+      return state + action.payload.delta;
     }
 
     default:
@@ -45,14 +41,22 @@ reduxStore.subscribe(() => {
   render();
 });
 
+/**
+ * Action creator
+ *
+ * @param {number} delta
+ */
+const modify = delta => ({
+  type: "MODIFY",
+  payload: {
+    delta
+  }
+});
+
 counterIncButton.addEventListener("click", () => {
-  reduxStore.dispatch({
-    type: "INCREMENT"
-  });
+  reduxStore.dispatch(modify(1));
 });
 
 counterDecButton.addEventListener("click", () => {
-  reduxStore.dispatch({
-    type: "DECREMENT"
-  });
+  reduxStore.dispatch(modify(-1));
 });
